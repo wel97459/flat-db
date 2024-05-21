@@ -110,9 +110,13 @@ class Collection {
     const noSchema = isEmpty(schema);
 
     const addOne = (entry) => {
-      const id = genid(32);
-      entry._id_ = id;
-      entry._ts_ = time();
+      if (!hasProperty(entry, '_id_')){
+        const id = genid(32);
+        entry._id_ = id;
+      }
+      if (!hasProperty(entry, '_ts_')){
+        entry._ts_ = time();
+      }
 
       if (!noSchema) {
         const _item = Object.assign({
@@ -158,7 +162,7 @@ class Collection {
     return candidates.length > 0 ? candidates[0] : null;
   }
 
-  update(id, data) {
+  update(id, data, allowAllKeys = False) {
     if (!isString(id)) {
       throw new Error('Invalid parameter. String required.');
     }
@@ -175,7 +179,7 @@ class Collection {
 
       for (const key in obj) {
         if (key !== '_id_' &&
-              hasProperty(data, key) &&
+              (hasProperty(data, key) || allowAllKeys) &&
                 typeof data[key] === typeof obj[key] &&
                   data[key] !== obj[key]) {
           obj[key] = data[key];
