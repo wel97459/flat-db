@@ -162,7 +162,7 @@ class Collection {
     return candidates.length > 0 ? candidates[0] : null;
   }
 
-  update(id, data, allowAllKeys = False) {
+  update(id, data, allowAllKeys = false) {
     if (!isString(id)) {
       throw new Error('Invalid parameter. String required.');
     }
